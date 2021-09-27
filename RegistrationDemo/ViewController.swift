@@ -8,9 +8,32 @@
 import UIKit
 import SnapKit
 
+struct RegisterModel{
+    
+    var myMail: String = ""
+    var myPassword: String = ""
+    var myNumber: String = ""
+    
+    func isValidEmail(_ email: String) -> Bool {
+        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+
+        let emailPred = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
+        return emailPred.evaluate(with: email)
+    }
+    
+    var isReady: Bool {
+        var ready: Bool = false
+        ready = isValidEmail(myMail) && myPassword.count > 0 && myNumber.count == 12
+        return ready
+    }
+    
+}
+
 class ViewController: UIViewController {
     
     let tableView = UITableView()
+    var registerModel: RegisterModel = RegisterModel()
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,6 +67,8 @@ class ViewController: UIViewController {
             make.top.equalToSuperview().offset(70)
         }
     }
+    
+  
 
 }
 
@@ -80,21 +105,21 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
             let cell = EditableTableViewCell(style: .default, reuseIdentifier: "EditableTableViewCell", model: EditableTableViewCell.Model(title: "Mail", text: "" ,placeHolder: "Enter email address here", subText: "", hasSubTitle: true, isUpperCased: false, true), rect: CGRect(x: 16, y: 0, width: windowWidth - 32, height: self.getItemHeight(indexPath.row) - 10), type: .typeName, imagex: nil, imageLeft: UIImage(named: "envelope"))
             
             cell.onText = { text in
-                print(text)
+                self.registerModel.myMail = text
             }
             return cell
         case 4:
             let cell = EditableTableViewCell(style: .default, reuseIdentifier: "EditableTableViewCell", model: EditableTableViewCell.Model(title: "Password", text: "" ,placeHolder: "Write your password", subText: "", hasSubTitle: true, isUpperCased: false, true), rect: CGRect(x: 16, y: 0, width: windowWidth - 32, height: self.getItemHeight(indexPath.row) - 10), type: .typrPassword, imagex: UIImage(named: "eyeOpen"), imageLeft: UIImage(named: "envelope"))
             
             cell.onText = { text in
-                print(text)
+                self.registerModel.myPassword = text
             }
             return cell
         case 5:
             let cell = EditableTableViewCell(style: .default, reuseIdentifier: "EditableTableViewCell", model: EditableTableViewCell.Model(title: "Your phone", text: "" ,placeHolder: "Enter email address here", subText: "", hasSubTitle: true, isUpperCased: false, true), rect: CGRect(x: 16, y: 0, width: windowWidth - 32, height: self.getItemHeight(indexPath.row) - 10), type: .typePhone, imagex: nil, imageLeft: UIImage(named: "phone"))
             
             cell.onText = { text in
-                print(text)
+                self.registerModel.myNumber = text
             }
             return cell
         case 6:
